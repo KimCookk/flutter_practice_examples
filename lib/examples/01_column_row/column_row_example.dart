@@ -7,6 +7,9 @@ class ColumnRowExample extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Column Row Example"),
+      ),
       body: Center(
         child: Column(
           // mainAxisSize: MainAxisSize.min,
