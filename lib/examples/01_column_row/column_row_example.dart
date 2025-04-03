@@ -6,32 +6,27 @@ class ColumnRowExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Column Row Example"),
-      ),
-      body: Center(
-        child: Column(
-          // mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Text("Row 1"),
-                Text("Row 2"),
-                Text("Row 3"),
-                Text("Row 4"),
-              ],
-            ),
-            Column(
-              children: [
-                Text("Column 1"),
-                Text("Column 2"),
-                Text("Column 3"),
-              ],
-            ),
-          ],
-        ),
+    return Center(
+      child: Column(
+        // mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Text("Row 1"),
+              Text("Row 2"),
+              Text("Row 3"),
+              Text("Row 4"),
+            ],
+          ),
+          Column(
+            children: [
+              Text("Column 1"),
+              Text("Column 2"),
+              Text("Column 3"),
+            ],
+          ),
+        ],
       ),
     );
   }

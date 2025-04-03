@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_practice_examples/examples/01_column_row/column_row_example.dart';
 import 'package:flutter_practice_examples/examples/02_widget_size/widget_size_example.dart';
 import 'package:flutter_practice_examples/examples/03_expanded/expanded_example.dart';
+import 'package:flutter_practice_examples/examples/04_flexible/flexible_example.dart';
+import 'package:flutter_practice_examples/examples/05_align_padding/align_padding_example.dart';
+import 'package:flutter_practice_examples/examples/06_listView/listView_example.dart';
+import 'package:flutter_practice_examples/examples/example_scaffold.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,18 +24,30 @@ class MyApp extends StatelessWidget {
 }
 
 class ExampleSelector extends StatelessWidget {
-  final List<_ExampleItem> examples = [
-    _ExampleItem(
+  final List<ExampleItem> examples = [
+    ExampleItem(
       title: '01. Column Row 예제',
       widget: ColumnRowExample(),
     ),
-    _ExampleItem(
+    ExampleItem(
       title: '02. Widget Size 예제',
       widget: WidgetSizeExample(),
     ),
-    _ExampleItem(
+    ExampleItem(
       title: '03. Expanded 예제',
       widget: ExpandedExample(),
+    ),
+    ExampleItem(
+      title: '04. Flexible 예제',
+      widget: FlexibleExample(),
+    ),
+    ExampleItem(
+      title: '05. Align Padding 예제',
+      widget: AlignPaddingExample(),
+    ),
+    ExampleItem(
+      title: '06. List View 예제',
+      widget: ListViewExample(),
     ),
   ];
 
@@ -51,7 +67,8 @@ class ExampleSelector extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => example.widget),
+                MaterialPageRoute(
+                    builder: (_) => ExampleScaffold(item: example)),
               );
             },
           );
@@ -61,9 +78,9 @@ class ExampleSelector extends StatelessWidget {
   }
 }
 
-class _ExampleItem {
+class ExampleItem {
   final String title;
   final Widget widget;
 
-  _ExampleItem({required this.title, required this.widget});
+  ExampleItem({required this.title, required this.widget});
 }
