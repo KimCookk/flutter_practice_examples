@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practice_examples/examples/01_column_row/column_row_example.dart';
 import 'package:flutter_practice_examples/examples/02_widget_size/widget_size_example.dart';
+import 'package:flutter_practice_examples/examples/03_expanded/expanded_example.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,7 +29,10 @@ class ExampleSelector extends StatelessWidget {
       title: '02. Widget Size 예제',
       widget: WidgetSizeExample(),
     ),
-    //_ExampleItem(title: '03. Stateful Counter', widget: CounterExample()),
+    _ExampleItem(
+      title: '03. Expanded 예제',
+      widget: ExpandedExample(),
+    ),
   ];
 
   ExampleSelector({super.key});
