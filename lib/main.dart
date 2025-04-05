@@ -5,6 +5,9 @@ import 'package:flutter_practice_examples/examples/03_expanded/expanded_example.
 import 'package:flutter_practice_examples/examples/04_flexible/flexible_example.dart';
 import 'package:flutter_practice_examples/examples/05_align_padding/align_padding_example.dart';
 import 'package:flutter_practice_examples/examples/06_listView/listView_example.dart';
+import 'package:flutter_practice_examples/examples/07_stateful_widget/bird_example.dart';
+import 'package:flutter_practice_examples/examples/07_stateful_widget/counter_example.dart';
+import 'package:flutter_practice_examples/examples/08_textfield/textfield_example.dart';
 import 'package:flutter_practice_examples/examples/example_scaffold.dart';
 
 void main() {
@@ -49,6 +52,18 @@ class ExampleSelector extends StatelessWidget {
       title: '06. List View 예제',
       widget: ListViewExample(),
     ),
+    ExampleItem(
+      title: '07_1. StatefulWidget 예제',
+      widget: BirdExample(),
+    ),
+    ExampleItem(
+      title: '07_2. StatefulWidget 예제',
+      widget: CounterExample(),
+    ),
+    ExampleItem(
+      title: '08. TextField 예제',
+      widget: TextfieldExample(),
+    )
   ];
 
   ExampleSelector({super.key});
