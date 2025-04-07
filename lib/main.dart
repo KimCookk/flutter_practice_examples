@@ -9,7 +9,9 @@ import 'package:flutter_practice_examples/examples/07_stateful_widget/bird_examp
 import 'package:flutter_practice_examples/examples/07_stateful_widget/counter_example.dart';
 import 'package:flutter_practice_examples/examples/08_textfield/textfield_example.dart';
 import 'package:flutter_practice_examples/examples/09_textformfield/textformfield_example.dart';
+import 'package:flutter_practice_examples/examples/10_navigator/bottom_bar/navigator_bottom_bar_example.dart';
 import 'package:flutter_practice_examples/examples/10_navigator/login/navigator_example.dart';
+import 'package:flutter_practice_examples/examples/10_navigator/named_routes/route_app.dart';
 import 'package:flutter_practice_examples/examples/example_scaffold.dart';
 
 void main() {
@@ -71,9 +73,13 @@ class ExampleSelector extends StatelessWidget {
       widget: TextFormFieldExample(),
     ),
     ExampleItem(
-      title: '10. Navigator 예제',
+      title: '10_1. Navigator 예제',
       widget: NavigatorExample(),
     ),
+    ExampleItem(
+      title: '10_2. Navigator 예제',
+      widget: NavigatorBottomBarExample(),
+    )
   ];
 
   ExampleSelector({super.key});
