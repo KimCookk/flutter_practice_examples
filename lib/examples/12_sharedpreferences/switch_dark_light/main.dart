@@ -4,11 +4,21 @@ import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); // 꼭 필요
-  runApp(ChangeNotifierProvider(
-    create: (context) => HomePageState(),
-    child: MyApp(),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => HomePageState()),
+        ChangeNotifierProvider(create: (context) => LoginPageState()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
+
+// runApp(ChangeNotifierProvider(
+//   create: (context) => HomePageState(),
+//   child: MyApp(),
+// ));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -29,12 +29,29 @@ class HomePageState extends ChangeNotifier {
   }
 }
 
+class LoginPageState extends ChangeNotifier {
+  bool _isLogin = false;
+
+  bool get isLogin => _isLogin;
+
+  void login() {
+    _isLogin = true;
+    notifyListeners();
+  }
+
+  void logout() {
+    _isLogin = false;
+    notifyListeners();
+  }
+}
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     bool isLightMode = context.watch<HomePageState>().isLightMode;
+    bool isLogin = context.watch<LoginPageState>().isLogin;
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -50,6 +67,29 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (isLogin) Icon(Icons.person),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (isLogin) {
+                        context.read<LoginPageState>().logout();
+                      } else {
+                        context.read<LoginPageState>().login();
+                      }
+                    },
+                    child: Text(isLogin ? 'Logout' : 'Login'),
+                  ),
+                ],
+              ),
+            ),
+            Spacer(),
             Icon(
               isLightMode ? Icons.light_mode : Icons.dark_mode,
               size: 100.0,
@@ -63,6 +103,7 @@ class HomePage extends StatelessWidget {
                 context.read<HomePageState>().toggleMode();
               },
             ),
+            Spacer(),
           ],
         ),
       ),
