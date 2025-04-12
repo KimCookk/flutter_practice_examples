@@ -5,7 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HomePageState extends ChangeNotifier {
   bool _isLightMode = true;
 
-  get isLightMode => _isLightMode;
+  // Type을 명시하는 쪽이 좋다.
+  bool get isLightMode => _isLightMode;
 
   HomePageState() {
     _loadModel();
@@ -14,6 +15,10 @@ class HomePageState extends ChangeNotifier {
   void _loadModel() async {
     final prefs = await SharedPreferences.getInstance();
     _isLightMode = prefs.getBool("isLightMode") ?? true;
+
+    // 비동기처리 notifyListeners() 처리가 필수적이다.
+    // 타이밍상으로 값은 바뀌었지만, View에서 인식을 못 할 수 있음.
+    notifyListeners();
   }
 
   void toggleMode() async {
