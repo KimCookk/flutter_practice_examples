@@ -1,42 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practice_examples/examples/13_http/user_list/models/user_model.dart';
-import 'package:flutter_practice_examples/examples/13_http/user_list/services/user_service.dart';
+import 'package:flutter_practice_examples/examples/13_http/user_list/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
-class UserListPage extends StatelessWidget {
+class UserListPage extends StatefulWidget {
   const UserListPage({super.key});
 
   @override
+  State<StatefulWidget> createState() => _UserListPageState();
+}
+
+class _UserListPageState extends State<UserListPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask(() {
+      context.read<UserProvider>().fetchUsers();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    UserProvider provider = context.watch<UserProvider>();
+    List<User> users = provider.users;
+    String errorMessage = provider.errorMessage;
+    bool isLoading = provider.isLoading;
+
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text('User List'),
       ),
       body: Center(
-        child: FutureBuilder(
-          future: UserService().fetch(),
-          builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
-            List<Widget> children = [];
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasData) {
-              for (var user in snapshot.data!) {
-                children.add(UserCard(
-                  name: user.name,
-                  email: user.email,
-                  city: user.city,
-                ));
-              }
-              return ListView(
-                children: children,
-              );
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              return Text('No data found.');
-            }
-          },
-        ),
+        child: Builder(builder: (context) {
+          if (isLoading) {
+            return CircularProgressIndicator();
+          } else if (errorMessage.isNotEmpty) {
+            return Text('Error: $errorMessage');
+          } else if (users.isEmpty) {
+            return Text('No data found.');
+          } else {
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<UserProvider>().fetchUsers();
+              },
+              child: ListView.builder(
+                itemCount: users.length,
+                itemBuilder: (context, index) {
+                  final user = users[index];
+                  return UserCard(
+                    name: user.name,
+                    email: user.email,
+                    city: user.city,
+                  );
+                },
+              ),
+            );
+          }
+        }),
       ),
     );
   }
@@ -59,12 +81,9 @@ class UserCard extends StatelessWidget {
     // TODO: implement build
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Text('Name : $name'),
-          Text('Email : $email'),
-          Text('City : $city'),
-        ],
+      child: ListTile(
+        title: Text(name),
+        subtitle: Text('$email / $city'),
       ),
     );
   }
