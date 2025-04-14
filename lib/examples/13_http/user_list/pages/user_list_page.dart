@@ -23,7 +23,7 @@ class _UserListPageState extends State<UserListPage> {
   @override
   Widget build(BuildContext context) {
     UserProvider provider = context.watch<UserProvider>();
-    List<User> users = provider.users;
+    List<User> users = provider.filteredUsers;
     String errorMessage = provider.errorMessage;
     bool isLoading = provider.isLoading;
 
@@ -32,33 +32,59 @@ class _UserListPageState extends State<UserListPage> {
       appBar: AppBar(
         title: Text('User List'),
       ),
-      body: Center(
-        child: Builder(builder: (context) {
-          if (isLoading) {
-            return CircularProgressIndicator();
-          } else if (errorMessage.isNotEmpty) {
-            return Text('Error: $errorMessage');
-          } else if (users.isEmpty) {
-            return Text('No data found.');
-          } else {
-            return RefreshIndicator(
-              onRefresh: () async {
-                context.read<UserProvider>().fetchUsers();
-              },
-              child: ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  final user = users[index];
-                  return UserCard(
-                    name: user.name,
-                    email: user.email,
-                    city: user.city,
-                  );
-                },
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: (value) {
+                      context.read<UserProvider>().setQuery(value);
+                      context.read<UserProvider>().filterUsers();
+                    },
+                  ),
+                ),
               ),
-            );
-          }
-        }),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.search),
+              ),
+            ],
+          ),
+          Expanded(
+            child: Builder(builder: (context) {
+              if (isLoading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (errorMessage.isNotEmpty) {
+                return Text('Error: $errorMessage');
+              } else if (users.isEmpty) {
+                return Text('No data found.');
+              } else {
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<UserProvider>().fetchUsers();
+                  },
+                  child: ListView.builder(
+                    itemCount: users.length,
+                    itemBuilder: (context, index) {
+                      final user = users[index];
+                      return UserCard(
+                        name: user.name,
+                        email: user.email,
+                        city: user.city,
+                      );
+                    },
+                  ),
+                );
+              }
+            }),
+          ),
+        ],
       ),
     );
   }

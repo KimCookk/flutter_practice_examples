@@ -4,15 +4,27 @@ import 'package:flutter_practice_examples/examples/13_http/user_list/services/us
 
 class UserProvider extends ChangeNotifier {
   List<User> _users = [];
+  List<User> _filteredUsers = [];
+
   bool _isLoading = false;
   String _errorMessage = "";
+  String _query = "";
 
   List<User> get users => _users;
+  List<User> get filteredUsers => _filteredUsers;
+
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
+  String get query => _query;
 
   void setUsers(List<User> users) {
     _users = users;
+    _filteredUsers = users;
+    notifyListeners();
+  }
+
+  void setFilteredUsers(List<User> filteredUsers) {
+    _filteredUsers = filteredUsers;
     notifyListeners();
   }
 
@@ -26,6 +38,10 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setQuery(String query) {
+    _query = query;
+  }
+
   void fetchUsers() async {
     try {
       setIsLoading(true);
@@ -36,5 +52,11 @@ class UserProvider extends ChangeNotifier {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  void filterUsers() {
+    List<User> resultUsers =
+        users.where((user) => user.name.contains(query)).toList();
+    setFilteredUsers(resultUsers);
   }
 }
