@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_practice_examples/examples/14_multi_provider/login_page.dart';
-import 'package:flutter_practice_examples/examples/14_multi_provider/home_page.dart';
-import 'package:flutter_practice_examples/examples/14_multi_provider/login_provider.dart';
 import 'package:provider/provider.dart';
+import 'home_page.dart';
+import 'login_page.dart';
+import 'login_provider.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
