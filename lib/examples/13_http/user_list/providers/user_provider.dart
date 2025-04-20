@@ -1,27 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practice_examples/examples/13_http/user_list/models/user_model.dart';
+import 'package:flutter_practice_examples/examples/13_http/user_list/providers/user_fetch_state.dart';
 import 'package:flutter_practice_examples/examples/13_http/user_list/services/user_service.dart';
-
-enum UserFetchState {
-  inital,
-  loading,
-  success,
-  error,
-}
 
 class UserProvider extends ChangeNotifier {
   List<User> _users = [];
   List<User> _filteredUsers = [];
-  UserFetchState _fetchState = UserFetchState.inital;
+  UserFetchState _fetchState = Initial();
 
-  String _errorMessage = "";
   String _query = "";
 
   List<User> get users => _users;
   List<User> get filteredUsers => _filteredUsers;
   UserFetchState get fetchState => _fetchState;
 
-  String get errorMessage => _errorMessage;
   String get query => _query;
 
   void setUsers(List<User> users) {
@@ -36,25 +28,25 @@ class UserProvider extends ChangeNotifier {
   }
 
   void setLoading() {
-    _fetchState = UserFetchState.loading;
+    _fetchState = UserFetchState.loading();
     notifyListeners();
   }
 
   void setFetchSuccess(List<User> users) {
     _users = users;
     _filteredUsers = users;
-    _fetchState = UserFetchState.success;
+    _fetchState = UserFetchState.success(users);
     notifyListeners();
   }
 
   void setFetchError(String errorMessage) {
-    _errorMessage = errorMessage;
-    _fetchState = UserFetchState.error;
+    _fetchState = UserFetchState.error(errorMessage);
     notifyListeners();
   }
 
   void setFiltered(List<User> filteredUsers) {
     _filteredUsers = filteredUsers;
+    _fetchState = UserFetchState.success(_filteredUsers);
     notifyListeners();
   }
 
@@ -75,6 +67,10 @@ class UserProvider extends ChangeNotifier {
   void filterUsers() {
     List<User> resultUsers =
         users.where((user) => user.name.contains(query)).toList();
-    setFilteredUsers(resultUsers);
+    if (resultUsers.isEmpty) {
+      setFetchError("검색 결과 없음");
+    } else {
+      setFiltered(resultUsers);
+    }
   }
 }
