@@ -24,9 +24,7 @@ class _UserListPageState extends State<UserListPage> {
   Widget build(BuildContext context) {
     UserProvider provider = context.watch<UserProvider>();
     List<User> users = provider.filteredUsers;
-    String errorMessage = provider.errorMessage;
-    bool isLoading = provider.isLoading;
-
+    UserFetchState state = provider.fetchState;
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -56,31 +54,43 @@ class _UserListPageState extends State<UserListPage> {
           ),
           Expanded(
             child: Builder(builder: (context) {
-              if (isLoading) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (errorMessage.isNotEmpty) {
-                return Text('Error: $errorMessage');
-              } else if (users.isEmpty) {
-                return Text('No data found.');
-              } else {
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    context.read<UserProvider>().fetchUsers();
-                  },
-                  child: ListView.builder(
-                    itemCount: users.length,
-                    itemBuilder: (context, index) {
-                      final user = users[index];
-                      return UserCard(
-                        name: user.name,
-                        email: user.email,
-                        city: user.city,
-                      );
-                    },
-                  ),
-                );
+              switch (state) {
+                case UserFetchState.inital:
+                  // TODO: Handle this case.
+                  return Center(
+                    child: Text('No data found.'),
+                  );
+                case UserFetchState.loading:
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                case UserFetchState.success:
+                  if (users.isEmpty) {
+                    return Center(
+                      child: Text('No data found.'),
+                    );
+                  } else {
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<UserProvider>().fetchUsers();
+                      },
+                      child: ListView.builder(
+                        itemCount: users.length,
+                        itemBuilder: (context, index) {
+                          final user = users[index];
+                          return UserCard(
+                            name: user.name,
+                            email: user.email,
+                            city: user.city,
+                          );
+                        },
+                      ),
+                    );
+                  }
+                case UserFetchState.error:
+                  return Center(
+                    child: Text('Error: ${provider.errorMessage}'),
+                  );
               }
             }),
           ),

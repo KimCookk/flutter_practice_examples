@@ -2,18 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_practice_examples/examples/13_http/user_list/models/user_model.dart';
 import 'package:flutter_practice_examples/examples/13_http/user_list/services/user_service.dart';
 
+enum UserFetchState {
+  inital,
+  loading,
+  success,
+  error,
+}
+
 class UserProvider extends ChangeNotifier {
   List<User> _users = [];
   List<User> _filteredUsers = [];
+  UserFetchState _fetchState = UserFetchState.inital;
 
-  bool _isLoading = false;
   String _errorMessage = "";
   String _query = "";
 
   List<User> get users => _users;
   List<User> get filteredUsers => _filteredUsers;
+  UserFetchState get fetchState => _fetchState;
 
-  bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
   String get query => _query;
 
@@ -28,13 +35,26 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setIsLoading(bool isLoading) {
-    _isLoading = isLoading;
+  void setLoading() {
+    _fetchState = UserFetchState.loading;
     notifyListeners();
   }
 
-  void setErrorMessage(String errorMessage) {
+  void setFetchSuccess(List<User> users) {
+    _users = users;
+    _filteredUsers = users;
+    _fetchState = UserFetchState.success;
+    notifyListeners();
+  }
+
+  void setFetchError(String errorMessage) {
     _errorMessage = errorMessage;
+    _fetchState = UserFetchState.error;
+    notifyListeners();
+  }
+
+  void setFiltered(List<User> filteredUsers) {
+    _filteredUsers = filteredUsers;
     notifyListeners();
   }
 
@@ -44,13 +64,11 @@ class UserProvider extends ChangeNotifier {
 
   void fetchUsers() async {
     try {
-      setIsLoading(true);
+      setLoading();
       List<User> userList = await UserService().fetch();
-      setUsers(userList);
+      setFetchSuccess(userList);
     } catch (e) {
-      setErrorMessage(e.toString());
-    } finally {
-      setIsLoading(false);
+      setFetchError(e.toString());
     }
   }
 
