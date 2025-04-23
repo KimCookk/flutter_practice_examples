@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,7 +11,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime? _selectedDate;
-  TimeOfDay? _selectedTime;
+  DateTime? _selectedTime;
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +26,23 @@ class _HomePageState extends State<HomePage> {
           children: [
             ElevatedButton(
               onPressed: () async {
-                DateTime? selectedDate = await showDatePicker(
-                  context: context,
-                  initialDate: _selectedDate ?? DateTime.now(),
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime(2099),
+                DateTime now = DateTime.now();
+                DatePicker.showDatePicker(
+                  context,
+                  showTitleActions: true,
+                  minTime: DateTime(now.year, now.month, now.day),
+                  maxTime: DateTime(2099, 12, 31),
+                  currentTime: DateTime.now(),
+                  locale: LocaleType.ko,
+                  onChanged: (date) {
+                    print('change $date');
+                  },
+                  onConfirm: (date) {
+                    setState(() {
+                      _selectedDate = date;
+                    });
+                  },
                 );
-
-                setState(() {
-                  _selectedDate = selectedDate;
-                });
               },
               child: Text('Date Picker'),
             ),
@@ -43,14 +51,19 @@ class _HomePageState extends State<HomePage> {
             ),
             ElevatedButton(
               onPressed: () async {
-                TimeOfDay? selectedTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
+                DatePicker.showTimePicker(
+                  context,
+                  showTitleActions: true,
+                  locale: LocaleType.ko,
+                  onChanged: (date) {
+                    print('change $date');
+                  },
+                  onConfirm: (date) {
+                    setState(() {
+                      _selectedTime = date;
+                    });
+                  },
                 );
-
-                setState(() {
-                  _selectedTime = selectedTime;
-                });
               },
               child: Text('Time Picker'),
             ),
