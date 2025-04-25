@@ -9,10 +9,21 @@ class Notificationservice {
     const AndroidInitializationSettings androidInit =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const InitializationSettings initSettings =
-        InitializationSettings(android: androidInit);
+    final DarwinInitializationSettings iosInit = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
 
-    await _notificationsPlugin.initialize(initSettings);
+    final InitializationSettings initSettings = InitializationSettings(
+      android: androidInit,
+      iOS: iosInit,
+    );
+
+    await _notificationsPlugin.initialize(initSettings,
+        onDidReceiveNotificationResponse: (details) {
+      print("🔔 알림 클릭됨 - payload: ${details.payload}");
+    });
   }
 
   static Future<void> showNotification({
