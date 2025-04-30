@@ -1,18 +1,26 @@
 import 'dart:async';
 import 'dart:math';
-
+import 'dart:ui';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
-void main(List<String> args) {
-  runZonedGuarded(() {
-    FlutterError.onError = (details) {
-      FlutterError.presentError(details);
-    };
+void main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
-    runApp(RunApp());
-  }, (error, stackTrace) {
-    print('전역 에러 발생 : $error');
-  });
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+  runApp(RunApp());
 }
 
 class RunApp extends StatelessWidget {
