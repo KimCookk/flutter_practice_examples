@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_practice_examples/examples/19_get_it/DI/app_service.dart';
+import 'package:flutter_practice_examples/examples/19_di/get_it_simple_example/app_service.dart';
 import 'home_page.dart';
 import 'package:get_it/get_it.dart';
 
@@ -12,6 +12,8 @@ void main(List<String> args) {
 
 void setupLocator() {
   getIt.registerSingleton<AppService>(AppService());
+  getIt.registerLazySingleton<SigletonService>(() => SigletonService());
+  getIt.registerCachedFactory<FactoryService>(() => FactoryService());
 }
 
 class DependencyIngectionApp extends StatelessWidget {

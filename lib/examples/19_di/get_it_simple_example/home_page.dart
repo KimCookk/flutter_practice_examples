@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_practice_examples/examples/19_get_it/DI/app_service.dart';
+import 'package:flutter_practice_examples/examples/19_di/get_it_simple_example/app_service.dart';
 
 import 'main.dart';
 
@@ -15,13 +15,21 @@ class HomePage extends StatelessWidget {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
               onPressed: () {
-                final service = getIt<AppService>();
-                service.printHello();
+                final service = getIt<SigletonService>();
+                service.log();
               },
-              child: Text('DI 실행!'),
+              child: Text('Sigleton 실행!'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final service = getIt<FactoryService>();
+                service.log();
+              },
+              child: Text('Factory 실행!'),
             ),
           ],
         ),
