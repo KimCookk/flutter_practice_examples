@@ -13,7 +13,7 @@ void main(List<String> args) {
 void setupLocator() {
   getIt.registerSingleton<AppService>(AppService());
   getIt.registerLazySingleton<SigletonService>(() => SigletonService());
-  getIt.registerCachedFactory<FactoryService>(() => FactoryService());
+  getIt.registerFactory<FactoryService>(() => FactoryService());
 }
 
 class DependencyIngectionApp extends StatelessWidget {
