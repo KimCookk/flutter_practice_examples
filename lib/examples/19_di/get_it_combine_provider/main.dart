@@ -11,7 +11,7 @@ final getIt = GetIt.instance;
 void main(List<String> args) {
   setupLocator();
   runApp(ChangeNotifierProvider(
-    create: (context) => LoginViewModel(),
+    create: (context) => LoginViewModel(getIt<AuthService>()),
     child: CombineProviderApp(),
   ));
 }
