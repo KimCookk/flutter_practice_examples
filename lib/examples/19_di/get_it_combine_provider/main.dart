@@ -8,7 +8,7 @@ import 'login_page.dart';
 
 final getIt = GetIt.instance;
 
-void main(List<String> args) {
+void main() {
   setupLocator();
   runApp(ChangeNotifierProvider(
     create: (context) => LoginViewModel(getIt<AuthService>()),
