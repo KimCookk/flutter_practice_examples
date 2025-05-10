@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'home_page.dart';
+import 'home_page_state.dart';
 
 void main() {
   runApp(TweenAnimationExampleApp());
@@ -12,7 +14,8 @@ class TweenAnimationExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
-      home: HomePage(),
+      home: ChangeNotifierProvider(
+          create: (context) => HomePageState(), child: HomePage()),
     );
   }
 }

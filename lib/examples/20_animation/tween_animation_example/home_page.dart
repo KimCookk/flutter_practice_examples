@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'home_page_state.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final double _begin = 0.0;
-  final double _end = 100.0;
-  String key = DateTime.now().millisecondsSinceEpoch.toString();
-
-  @override
   Widget build(BuildContext context) {
+    String key = context.watch<HomePageState>().animationKey!;
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +19,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             ElevatedButton(
               onPressed: () {
-                restart();
+                context.read<HomePageState>().setAnimationKey();
               },
               child: Text('Start'),
             ),
@@ -34,7 +28,7 @@ class _HomePageState extends State<HomePage> {
             ),
             TweenAnimationBuilder(
               key: Key(key),
-              tween: Tween(begin: _begin, end: _end),
+              tween: Tween(begin: 0.0, end: 100.0),
               duration: Duration(seconds: 2),
               builder: (context, value, child) {
                 return Text(value.toStringAsFixed(1));
@@ -44,19 +38,5 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
-
-  void restart() {
-    // setState(() {
-    //   _end = 0;
-    // });
-    // Future.delayed(Duration(milliseconds: 1), () {
-    //   setState(() {
-    //     _end = 100;
-    //   });
-    // });
-    setState(() {
-      key = DateTime.now().millisecondsSinceEpoch.toString();
-    });
   }
 }
