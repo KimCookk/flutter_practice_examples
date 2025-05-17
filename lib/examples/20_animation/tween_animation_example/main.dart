@@ -15,7 +15,9 @@ class TweenAnimationExampleApp extends StatelessWidget {
     // TODO: implement build
     return MaterialApp(
       home: ChangeNotifierProvider(
-          create: (context) => HomePageState(), child: HomePage()),
+        create: (context) => HomePageState(),
+        child: HomePage(),
+      ),
     );
   }
 }
