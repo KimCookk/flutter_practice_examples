@@ -1,41 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_examples/examples/22_wrap/home_page_state.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _HomePageState();
-}
-
-class _HomePageState extends State {
-  final tags = ['Flutter', 'Dart', 'Provider', 'Riverpod', 'Bloc', 'Hooks'];
-  final selected = <String>{};
-
-  @override
   Widget build(BuildContext context) {
+    final state = context.watch<HomePageState>();
+    final unSelectedTags = state.unSelectedTags;
+    final selectedTags = state.selectedTags;
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text('Wrap Example Page'),
       ),
       body: Center(
-        child: Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: tags.map(
-            (tag) {
-              final isSelected = selected.contains(tag);
-              return ChoiceChip(
-                label: Text(tag),
-                selected: isSelected,
-                onSelected: (value) {
-                  setState(() {
-                    isSelected ? selected.remove(tag) : selected.add(tag);
-                  });
+        child: Column(
+          children: [
+            Text('UnSelected'),
+            SizedBox(
+              height: 20,
+            ),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: unSelectedTags.map(
+                (tag) {
+                  return ChoiceChip(
+                    label: Text(tag),
+                    selected: false,
+                    onSelected: (value) {
+                      context.read<HomePageState>().select(tag);
+                    },
+                  );
                 },
-              );
-            },
-          ).toList(),
+              ).toList(),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text('Selected'),
+            SizedBox(
+              height: 20,
+            ),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: selectedTags.map(
+                (tag) {
+                  return ChoiceChip(
+                    label: Text(tag),
+                    selected: true,
+                    onSelected: (value) {
+                      context.read<HomePageState>().unselect(tag);
+                    },
+                  );
+                },
+              ).toList(),
+            ),
+          ],
         ),
       ),
     );
