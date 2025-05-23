@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_examples/examples/22_wrap/animation_dot_grid_example/animation_dot_grid_state.dart';
+import 'package:provider/provider.dart';
 
 class AnimationDot extends StatelessWidget {
-  final double opacity;
-  final String animationKey;
+  final int index;
 
-  const AnimationDot(
-      {super.key, required this.opacity, required this.animationKey});
+  const AnimationDot({
+    super.key,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
+    var state = context.watch<AnimationDotGridState>();
+    String animationKey = state.animationKey;
+    double opacity = state.getOpacity(index);
+
     // TODO: implement build
     return TweenAnimationBuilder(
       key: ValueKey(animationKey),
